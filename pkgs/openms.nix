@@ -4,7 +4,7 @@
 , cmake
 , wrapQtAppsHook
 
-, boost178
+, boost186
 , bzip2
 , CoinMP
 , doxygen
@@ -14,6 +14,8 @@
 , libsvm
 , openmp
 , python3
+, qtbase
+, qtsvg
 , xercesc
 , xz
 , yaml-cpp
@@ -39,13 +41,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "OpenMS";
-  version = "3.2.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "OpenMS";
     repo = "OpenMS";
-    rev = "refs/tags/release/${version}";
-    hash = "sha256-+9d1r7dn43HvM2WrEYg3GLyVAHmibGVmZlIh1alEpTc=";
+    #rev = "refs/tags/release/${version}";
+    rev = "develop";
+    hash = "sha256-iK6+oXL/Dmf57KPH7M2AJLnvUWFeqw4KIg5pObRGqoY=";
   };
 
   # doCheck = true;
@@ -73,7 +76,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional enablePython "-DPYOPENMS=ON";
 
   buildInputs = [
-    boost178
+    boost186
     bzip2
     CoinMP
     eigen
@@ -81,6 +84,8 @@ stdenv.mkDerivation rec {
     kissfft
     libsvm
     openmp
+    qtbase
+    qtsvg
     xercesc
     xz
     yaml-cpp
