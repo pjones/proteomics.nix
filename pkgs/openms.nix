@@ -46,9 +46,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenMS";
     repo = "OpenMS";
-    #rev = "refs/tags/release/${version}";
-    rev = "develop";
-    hash = "sha256-iK6+oXL/Dmf57KPH7M2AJLnvUWFeqw4KIg5pObRGqoY=";
+    rev = "refs/tags/release/${version}";
+    hash = "sha256-rPkh+AYI8ni6b+mkUANXT+baYbohoHXvEo+jB8iH5Uk=";
   };
 
   # doCheck = true;
