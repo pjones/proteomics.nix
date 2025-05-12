@@ -1,0 +1,24 @@
+#+title: OpenMS + Nix
+
+* A Nix Flake for OpenMS
+
+  This repository contains a [[https://nixos.org/][Nix]] flake for building [[https://openms.de/][OpenMS]] and related
+  tools.  It can be used to install OpenMS (without needing any of its
+  dependencies) or for dropping into a development environment for
+  contributing to the project.
+
+** Installing OpenMS
+
+   1. [[https://nixos.org/download/#download-nix][Install Nix]]
+
+   2. Build and Install OpenMS:
+
+      #+header: :exports code
+      #+begin_src sh
+        nix \
+          --extra-experimental-features nix-command \
+          --extra-experimental-features flakes \
+          profile install github:pjones/nix-openms
+      #+end_src
+
+   3. Have fun!
