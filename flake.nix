@@ -51,6 +51,8 @@
             openms = self.packages.${system}.openms;
           };
 
+          flashlfq = pkgs.callPackage pkgs/flashlfq { };
+
           openms = pkgs.callPackage pkgs/openms.nix {
             inherit python3;
             inherit (pkgs.kdePackages) wrapQtAppsHook qtbase qtsvg;
