@@ -22,6 +22,14 @@ buildDotnetModule rec {
   projectFile = [ "CMD/CMD.csproj" ];
   nugetDeps = ./deps.json;
 
+  # The app writes a license file in the wrong directory:
+  # https://github.com/smith-chem-wisc/FlashLFQ/issues/162
+  postPatch = ''
+    sed -i -e \
+      's/AppDomain.CurrentDomain.BaseDirectory/Environment.CurrentDirectory/g' \
+      Util/LicenceAgreementSettings.cs
+  '';
+
   # Rename the main program so it recognizable:
   postFixup = ''
     mv $out/bin/CMD $out/bin/FlashLFQ
