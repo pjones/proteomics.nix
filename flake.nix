@@ -53,6 +53,8 @@
 
           flashlfq = pkgs.callPackage pkgs/flashlfq { };
 
+          metamorpheus = pkgs.callPackage pkgs/metamorpheus { };
+
           openms = pkgs.callPackage pkgs/openms.nix {
             inherit python3;
             inherit (pkgs.kdePackages) wrapQtAppsHook qtbase qtsvg;
