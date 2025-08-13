@@ -18,7 +18,7 @@ python3Packages.buildPythonPackage rec {
   ];
 
   dependencies = with python3Packages; [
-    cython
+    cython_openms
   ];
 
   meta = {

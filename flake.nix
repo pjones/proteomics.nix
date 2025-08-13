@@ -37,10 +37,13 @@
           openmp = pkgs.llvmPackages_12.openmp;
         };
 
-        pyautowrap = pkgs.callPackage pkgs/pyautowrap.nix { };
+        pyautowrap = pkgs.callPackage pkgs/pyautowrap.nix {
+          python3Packages = self.packages.${pkgs.system}.python3.pkgs;
+        };
 
         python3 = pkgs.python3.override {
           packageOverrides = final: prev: {
+            cython_openms = prev.cython;
             autowrap = self.packages.${pkgs.system}.pyautowrap;
             pyopenms = self.packages.${pkgs.system}.pyopenms;
           };

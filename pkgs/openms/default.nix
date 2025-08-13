@@ -34,7 +34,7 @@ let
   pythonAndPackages =
     python3.withPackages (py-pkgs: with py-pkgs; [
       autowrap
-      cython
+      cython_openms
       numpy
       pandas
       pip
