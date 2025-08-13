@@ -133,6 +133,21 @@ let
       mkdir -p "$out/share/whl"
       cp pyOpenMS/dist/${wheelName} "$out/share/whl/"
     '';
+
+    meta = {
+      description = "Open-source software for LC-MS data management and analyses";
+      longDescription = ''
+        OpenMS is an open-source software C++ library for LC-MS data
+        management and analyses. It offers an infrastructure for rapid
+        development of mass spectrometry related software. OpenMS is
+        free software available under the three clause BSD license and
+        runs under Windows, macOS, and Linux.
+      '';
+      homepage = "https://openms.de/";
+      license = lib.licenses.bsd3;
+      maintainers = with lib.maintainers; [ pjones ];
+      platforms = lib.platforms.all;
+    };
   };
 in
 package
