@@ -1,24 +1,34 @@
-#+title: OpenMS + Nix
+#+title: Proteomics.nix
 
-* A Nix Flake for OpenMS
+A [[https://nixos.org/][Nix Flake]] for easy access to proteomics data analysis tools such as
+[[https://openms.de/][OpenMS]].
 
-  This repository contains a [[https://nixos.org/][Nix]] flake for building [[https://openms.de/][OpenMS]] and related
-  tools.  It can be used to install OpenMS (without needing any of its
-  dependencies) or for dropping into a development environment for
-  contributing to the project.
+* Installing Packages
 
-** Installing OpenMS
+  1. [[https://nixos.org/download/#download-nix][Install Nix]]
 
-   1. [[https://nixos.org/download/#download-nix][Install Nix]]
+  2. Install the desired package:
 
-   2. Build and Install OpenMS:
+     Note: Replace =PACKAGE= with the name of the desired package.  See
+     below for a list of available packages.
 
-      #+header: :exports code
-      #+begin_src sh
-        nix \
-          --extra-experimental-features nix-command \
-          --extra-experimental-features flakes \
-          profile install github:pjones/nix-openms
-      #+end_src
+     #+begin_src sh
+       nix \
+         --extra-experimental-features nix-command \
+         --extra-experimental-features flakes \
+         profile install github:pjones/proteomics.nix#PACKAGE
+     #+end_src
 
-   3. Have fun!
+* Packages
+
+  - [[https://openms.de/][OpenMS]] (=openms=)
+
+  - [[https://github.com/vdemichev/DiaNN][DIA-NN]] (=diann-academia=)
+
+  - [[https://github.com/smith-chem-wisc/FlashLFQ][FlashLFQ]] (=flashlfq=)
+
+  - [[https://github.com/smith-chem-wisc/MetaMorpheus][MetaMorpheus]] (=metamorpheus=)
+
+  - [[https://github.com/thermofisherlsms/RawFileReader][RawFileReader]] (=rawfilereader=)
+
+  - [[https://github.com/compomics/ThermoRawFileParser][ThermoRawFileParser]] (=thermorawfp=)
