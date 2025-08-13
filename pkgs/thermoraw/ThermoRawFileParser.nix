@@ -38,4 +38,19 @@ buildDotnetModule rec {
      "$out/lib/ThermoRawFileParser/libMonoPosixHelper.so" \
      "$out/lib/ThermoRawFileParser/libMonoPosixHelper"
   '';
+
+  meta = {
+    description = "Thermo RAW file parser";
+    longDescription = ''
+      Wrapper around the .net (C#) ThermoFisher ThermoRawFileReader
+      library for running on Linux with mono (works on Windows
+      too). It takes a thermo RAW file as input and outputs a metadata
+      file and the spectra in 3 possible formats.
+    '';
+    homepage = "https://github.com/compomics/ThermoRawFileParser";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pjones ];
+    platforms = lib.platforms.all;
+  };
+
 }

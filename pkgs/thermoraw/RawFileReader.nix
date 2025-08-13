@@ -49,4 +49,18 @@ stdenvNoCC.mkDerivation {
 
     runHook postInstall
   '';
+
+  meta = {
+    description = "C# library to read Thermo Scientific RAW files";
+    longDescription = ''
+      RawFilelReader is a group of .Net Assemblies written in C# used
+      to read Thermo Scientific RAW files. The assemblies can be used
+      to read RAW files on Windows, Linux, and MacOS using C# or other
+      languages that can acces a .Net assembly.
+    '';
+    homepage = "https://github.com/thermofisherlsms/RawFileReader";
+    license = "proprietary";
+    maintainers = with lib.maintainers; [ pjones ];
+    platforms = lib.platforms.all;
+  };
 }
