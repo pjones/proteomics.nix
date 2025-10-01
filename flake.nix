@@ -38,7 +38,7 @@
         openms = pkgs.callPackage pkgs/openms {
           inherit (pkgs.kdePackages) wrapQtAppsHook qtbase qtsvg;
           python3 = self.packages.${pkgs.system}.python3;
-          openmp = pkgs.llvmPackages_12.openmp;
+          openmp = pkgs.llvmPackages.openmp;
         };
 
         percolator = pkgs.callPackage pkgs/percolator {
@@ -55,7 +55,6 @@
 
         python3 = pkgs.python3.override {
           packageOverrides = final: prev: {
-            cython_openms = prev.cython;
             autowrap = self.packages.${pkgs.system}.pyautowrap;
             pyopenms = self.packages.${pkgs.system}.pyopenms;
             pyopenms-viz = self.packages.${pkgs.system}.pyopenms-viz;
