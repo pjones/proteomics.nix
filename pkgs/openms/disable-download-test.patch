@@ -1,0 +1,20 @@
+diff --git i/src/tests/class_tests/openms/source/File_test.cpp w/src/tests/class_tests/openms/source/File_test.cpp
+index 747affa0c4..52a033271b 100644
+--- i/src/tests/class_tests/openms/source/File_test.cpp
++++ w/src/tests/class_tests/openms/source/File_test.cpp
+@@ -337,6 +337,7 @@ START_SECTION(File::~TempDir())
+ END_SECTION
+ 
+ 
++/*
+ START_SECTION(File::download(std::string url, std::string filename))
+ {
+   std::string url = R"(http://raw.githubusercontent.com/OpenMS/OpenMS/refs/heads/develop/README.md)";
+@@ -351,6 +352,7 @@ START_SECTION(File::download(std::string url, std::string filename))
+   }
+ }
+ END_SECTION
++*/
+ 
+ START_SECTION(static File::MatchingFileListsStatus validateMatchingFileNames(const StringList& sl1, const StringList& sl2, bool basename, bool ignore_extension))
+ {
