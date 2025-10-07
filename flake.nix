@@ -31,6 +31,8 @@
 
         metamorpheus = pkgs.callPackage pkgs/metamorpheus { };
 
+        msgfplus = pkgs.callPackage pkgs/msgfplus.nix { };
+
         openms = pkgs.callPackage pkgs/openms {
           inherit (pkgs.kdePackages) wrapQtAppsHook qtbase qtsvg;
           python3 = self.packages.${pkgs.system}.python3;
