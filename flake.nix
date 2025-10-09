@@ -25,6 +25,8 @@
       packages = each (pkgs: {
         default = self.packages.${pkgs.system}.openms;
 
+        comet = pkgs.callPackage pkgs/comet.nix { };
+
         diann-academia = pkgs.callPackage pkgs/diann-academia.nix { };
 
         flashlfq = pkgs.callPackage pkgs/flashlfq { };
