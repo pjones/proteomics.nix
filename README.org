@@ -29,6 +29,8 @@ A [[https://nixos.org/][Nix Flake]] for easy access to proteomics data analysis 
 
   - [[https://github.com/smith-chem-wisc/MetaMorpheus][MetaMorpheus]] (=metamorpheus=)
 
+  - [[https://uwpr.github.io/Comet/][Comet]] (=comet=)
+
   - [[https://github.com/MSGFPlus/msgfplus][MS-GF+]] (=msgfplus=)
 
   - [[https://github.com/thermofisherlsms/RawFileReader][RawFileReader]] (=rawfilereader=)
