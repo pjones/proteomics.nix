@@ -41,6 +41,10 @@
           openmp = pkgs.llvmPackages_12.openmp;
         };
 
+        percolator = pkgs.callPackage pkgs/percolator {
+          boost = pkgs.boost186;
+        };
+
         pyautowrap = pkgs.callPackage pkgs/pyautowrap.nix {
           python3Packages = self.packages.${pkgs.system}.python3.pkgs;
         };

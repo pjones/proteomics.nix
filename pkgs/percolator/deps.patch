@@ -1,0 +1,148 @@
+diff --git i/CommonCMake.txt w/CommonCMake.txt
+index 07a2f17f..1c098d5e 100644
+--- i/CommonCMake.txt
++++ w/CommonCMake.txt
+@@ -140,7 +140,7 @@ else(MINGW OR WIN32 OR APPLE)
+ endif()
+ 
+ # Link Boost static and single threaded
+-set(Boost_USE_STATIC_LIBS   ON)
++#set(Boost_USE_STATIC_LIBS   ON)
+ set(Boost_USE_MULTITHREADED OFF)
+ 
+ set(BOOST_MIN_VERSION "1.70.0")
+diff --git i/src/CMakeLists.txt w/src/CMakeLists.txt
+index 4a886103..82ef0481 100644
+--- i/src/CMakeLists.txt
++++ w/src/CMakeLists.txt
+@@ -77,43 +77,46 @@ set (DBLAS_LIBRARIES ${DBLAS_LIBRARIES} dblas)
+ # PULL Eigen
+ ###############################################################################
+ 
+-include(FetchContent)
++# include(FetchContent)
++#
++# # Avoid Eigen's conflicting 'blas' target
++# set(EIGEN_BUILD_BLAS OFF CACHE BOOL "" FORCE)
++# set(EIGEN_BUILD_TESTING OFF CACHE BOOL "" FORCE)
++# set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
++# set(EIGEN_BUILD_DOC OFF CACHE BOOL "" FORCE)
++# set(EIGEN_BUILD_PKGCONFIG OFF CACHE BOOL "" FORCE)
++#
++# # Avoid adding Eigen's blas directory (explicitly ignore it)
++# set(EIGEN_DISABLE_BLAS ON CACHE BOOL "Disable Eigen's BLAS build" FORCE)
++#
++# FetchContent_Declare(
++#   eigen
++#   GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
++#   GIT_TAG 3.4.0
++# )
++#
++# FetchContent_MakeAvailable(eigen)
++# include_directories(${eigen_SOURCE_DIR})
++#
++# ### Patch for avoiding _finite
++#
++# set(EIGEN_MATHFUNCTIONS_FILE "${eigen_SOURCE_DIR}/Eigen/src/Core/MathFunctions.h")
++#
++# # Do the patch if not already patched
++# file(READ "${EIGEN_MATHFUNCTIONS_FILE}" MATHFUNCS_CONTENT)
++#
++# string(REGEX REPLACE
++#   "#elif EIGEN_USE_STD_FPCLASSIFY[ \r\n]+[^\r\n]*using std::isfinite;[ \r\n]+[^\r\n]*return isfinite[^\r\n]*;"
++#   "#elif EIGEN_USE_STD_FPCLASSIFY\n    return !std::isnan(x) && !std::isinf(x); // PATCHED to avoid std::isfinite on MSVC"
++#   MATHFUNCS_CONTENT_PATCHED
++#   "${MATHFUNCS_CONTENT}"
++# )
++#
++# file(WRITE "${EIGEN_MATHFUNCTIONS_FILE}" "${MATHFUNCS_CONTENT_PATCHED}")
++# ### End patch
+ 
+-# Avoid Eigen's conflicting 'blas' target
+-set(EIGEN_BUILD_BLAS OFF CACHE BOOL "" FORCE)
+-set(EIGEN_BUILD_TESTING OFF CACHE BOOL "" FORCE)
+-set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
+-set(EIGEN_BUILD_DOC OFF CACHE BOOL "" FORCE)
+-set(EIGEN_BUILD_PKGCONFIG OFF CACHE BOOL "" FORCE)
+-
+-# Avoid adding Eigen's blas directory (explicitly ignore it)
+-set(EIGEN_DISABLE_BLAS ON CACHE BOOL "Disable Eigen's BLAS build" FORCE)
+-
+-FetchContent_Declare(
+-  eigen
+-  GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+-  GIT_TAG 3.4.0
+-)
+-
+-FetchContent_MakeAvailable(eigen)
+-include_directories(${eigen_SOURCE_DIR})
+-
+-### Patch for avoiding _finite
+-
+-set(EIGEN_MATHFUNCTIONS_FILE "${eigen_SOURCE_DIR}/Eigen/src/Core/MathFunctions.h")
+-
+-# Do the patch if not already patched
+-file(READ "${EIGEN_MATHFUNCTIONS_FILE}" MATHFUNCS_CONTENT)
+-
+-string(REGEX REPLACE
+-  "#elif EIGEN_USE_STD_FPCLASSIFY[ \r\n]+[^\r\n]*using std::isfinite;[ \r\n]+[^\r\n]*return isfinite[^\r\n]*;"
+-  "#elif EIGEN_USE_STD_FPCLASSIFY\n    return !std::isnan(x) && !std::isinf(x); // PATCHED to avoid std::isfinite on MSVC"
+-  MATHFUNCS_CONTENT_PATCHED
+-  "${MATHFUNCS_CONTENT}"
+-)
+-
+-file(WRITE "${EIGEN_MATHFUNCTIONS_FILE}" "${MATHFUNCS_CONTENT_PATCHED}")
+-### End patch
++find_package(Eigen3 REQUIRED)
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${EIGEN3_INCLUDE_DIR}")
+ 
+ ###############################################################################
+ # RUN CODESYNTHESIS
+diff --git i/tests/unit_tests/percolator/CMakeLists.txt w/tests/unit_tests/percolator/CMakeLists.txt
+index 7f419d5d..7706f348 100644
+--- i/tests/unit_tests/percolator/CMakeLists.txt
++++ w/tests/unit_tests/percolator/CMakeLists.txt
+@@ -11,27 +11,28 @@ set(BUILD_SHARED_LIBS OFF)
+ # =============================
+ # Fetch or find GoogleTest
+ # =============================
+-message(STATUS "Fetching GoogleTest...")
+-set(BUILD_GTEST ON)
+-set(INSTALL_GTEST OFF)
+-set(BUILD_GMOCK OFF)
+-
+-FetchContent_Declare(
+-  googletest
+-  GIT_REPOSITORY https://github.com/google/googletest.git
+-  GIT_TAG v1.16.0
+-)
+-FetchContent_Populate(googletest)
+-
+-# This is the correct way to build the actual library
+-add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
++# message(STATUS "Fetching GoogleTest...")
++# set(BUILD_GTEST ON)
++# set(INSTALL_GTEST OFF)
++# set(BUILD_GMOCK OFF)
++#
++# FetchContent_Declare(
++#   googletest
++#   GIT_REPOSITORY https://github.com/google/googletest.git
++#   GIT_TAG v1.16.0
++# )
++# FetchContent_Populate(googletest)
++#
++# # This is the correct way to build the actual library
++# add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
+ 
+ # Optional: apply RTTI to gtest explicitly (not usually needed if add_compile_options is set globally)
+ # target_compile_options(gtest PRIVATE -frtti)
+ # target_compile_options(gtest_main PRIVATE -frtti)
+ 
++find_package(GTest REQUIRED)
+ enable_testing()
+-include(GoogleTest)
++#include(GTest)
+ 
+ # =============================
+ # Fetch or find Eigen3
