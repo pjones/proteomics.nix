@@ -8,7 +8,7 @@
 
   boost186,
   bzip2,
-  CoinMP,
+  coinmp,
   dockerTools,
   doxygen,
   eigen,
@@ -51,7 +51,7 @@ let
   # the build system.  Note: This isn't very flexible.
   wheelName =
     let
-      system = lib.splitString "-" stdenv.system;
+      system = lib.splitString "-" stdenv.hostPlatform.system;
       cpu = builtins.elemAt system 0;
       os = builtins.elemAt system 1;
       pyver = lib.concatStrings (lib.take 2 (lib.splitString "." python3.version));
@@ -104,7 +104,7 @@ let
     buildInputs = [
       boost186
       bzip2
-      CoinMP
+      coinmp
       eigen
       glpk
       kissfft
