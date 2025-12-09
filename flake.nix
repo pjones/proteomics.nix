@@ -5,7 +5,8 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
   };
 
-  outputs = { self, nixpkgs, ... }:
+  outputs =
+    { self, nixpkgs, ... }:
     let
       supportedSystems = [
         "x86_64-linux"
@@ -14,58 +15,69 @@
         "aarch64-darwin"
       ];
 
-      each = f:
-        nixpkgs.lib.genAttrs supportedSystems (system:
-          let pkgs = import nixpkgs { inherit system; };
-          in f pkgs);
+      each =
+        f:
+        nixpkgs.lib.genAttrs supportedSystems (
+          system:
+          let
+            pkgs = import nixpkgs { inherit system; };
+          in
+          f pkgs system
+        );
 
     in
     {
       ##########################################################################
-      packages = each (pkgs: {
-        default = self.packages.${pkgs.system}.openms;
+      packages = each (
+        pkgs: system: {
+          default = self.packages.${system}.openms;
 
-        comet = pkgs.callPackage pkgs/comet.nix { };
+          comet = pkgs.callPackage pkgs/comet.nix { };
 
-        diann-academia = pkgs.callPackage pkgs/diann-academia.nix { };
+          diann-academia = pkgs.callPackage pkgs/diann-academia.nix { };
 
-        flashlfq = pkgs.callPackage pkgs/flashlfq { };
+          flashlfq = pkgs.callPackage pkgs/flashlfq { };
 
-        metamorpheus = pkgs.callPackage pkgs/metamorpheus { };
+          metamorpheus = pkgs.callPackage pkgs/metamorpheus { };
 
-        msgfplus = pkgs.callPackage pkgs/msgfplus.nix { };
+          msgfplus = pkgs.callPackage pkgs/msgfplus.nix { };
 
-        openms = pkgs.callPackage pkgs/openms {
-          inherit (pkgs.kdePackages) wrapQtAppsHook qtbase qtsvg;
-          python3 = self.packages.${pkgs.system}.python3;
-          openmp = pkgs.llvmPackages.openmp;
-        };
-
-        percolator = pkgs.callPackage pkgs/percolator {
-          boost = pkgs.boost186;
-        };
-
-        pyautowrap = pkgs.callPackage pkgs/pyautowrap.nix {
-          python3Packages = self.packages.${pkgs.system}.python3.pkgs;
-        };
-
-        pyopenms-viz = pkgs.callPackage pkgs/pyopenms-viz.nix {
-          python3Packages = self.packages.${pkgs.system}.python3.pkgs;
-        };
-
-        python3 = pkgs.python3.override {
-          packageOverrides = final: prev: {
-            autowrap = self.packages.${pkgs.system}.pyautowrap;
-            pyopenms = self.packages.${pkgs.system}.pyopenms;
-            pyopenms-viz = self.packages.${pkgs.system}.pyopenms-viz;
+          openms = pkgs.callPackage pkgs/openms {
+            inherit (pkgs.kdePackages) wrapQtAppsHook qtbase qtsvg;
+            python3 = self.packages.${system}.python3;
+            openmp = pkgs.llvmPackages.openmp;
           };
-        };
 
-        rawfilereader = pkgs.callPackage pkgs/thermoraw/RawFileReader.nix { };
+          percolator = pkgs.callPackage pkgs/percolator {
+            boost = pkgs.boost186;
+          };
 
-        thermorawfp = pkgs.callPackage pkgs/thermoraw/ThermoRawFileParser.nix {
-          RawFileReader = self.packages.${pkgs.system}.rawfilereader;
-        };
-      });
+          pyautowrap = pkgs.callPackage pkgs/pyautowrap.nix {
+            python3Packages = self.packages.${system}.python3.pkgs;
+          };
+
+          pyopenms-viz = pkgs.callPackage pkgs/pyopenms-viz.nix {
+            python3Packages = self.packages.${system}.python3.pkgs;
+          };
+
+          python3 = pkgs.python3.override {
+            packageOverrides = final: prev: {
+              autowrap = self.packages.${system}.pyautowrap;
+              pyopenms = self.packages.${system}.openms.pyopenms;
+              pyopenms-viz = self.packages.${system}.pyopenms-viz;
+            };
+          };
+
+          rawfilereader = pkgs.callPackage pkgs/thermoraw/RawFileReader.nix { };
+
+          thermorawfp = pkgs.callPackage pkgs/thermoraw/ThermoRawFileParser.nix {
+            RawFileReader = self.packages.${system}.rawfilereader;
+          };
+        }
+      );
+
+      ##########################################################################
+      # Build and check everything:
+      checks = each (pkgs: system: self.packages.${system});
     };
 }
