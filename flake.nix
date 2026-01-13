@@ -49,11 +49,16 @@
           python3Packages = self.packages.${pkgs.system}.python3.pkgs;
         };
 
+        pyopenms-viz = pkgs.callPackage pkgs/pyopenms-viz.nix {
+          python3Packages = self.packages.${pkgs.system}.python3.pkgs;
+        };
+
         python3 = pkgs.python3.override {
           packageOverrides = final: prev: {
             cython_openms = prev.cython;
             autowrap = self.packages.${pkgs.system}.pyautowrap;
             pyopenms = self.packages.${pkgs.system}.pyopenms;
+            pyopenms-viz = self.packages.${pkgs.system}.pyopenms-viz;
           };
         };
 
