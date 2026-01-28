@@ -5,8 +5,8 @@
 }:
 
 let
-  version = "0.24.0";
-  hash = "sha256-hzU6Lgsj3jDbzJOjOfLlIUnckYzag9j3FSVe9TfQ/ZM=";
+  version = "0.27.0";
+  hash = "sha256-f3RuAGqSQJ3Sy6BOAz3UFf/nWa5WIKk6EqxzQGhDCDE=";
 in
 python3Packages.buildPythonPackage rec {
   inherit version;
