@@ -58,6 +58,10 @@
             boost = pkgs.boost186;
           };
 
+          py-build-cmake = pkgs.callPackage pkgs/py-build-cmake.nix {
+            python3Packages = self.packages.${system}.python3.pkgs;
+          };
+
           pyautowrap = pkgs.callPackage pkgs/pyautowrap.nix {
             python3Packages = self.packages.${system}.python3.pkgs;
           };
@@ -71,6 +75,7 @@
           python3 = pkgs.python3.override {
             packageOverrides = final: prev: {
               autowrap = self.packages.${system}.pyautowrap;
+              py-build-cmake = self.packages.${system}.py-build-cmake;
               pyopenms = self.packages.${system}.openms.pyopenms;
               pyopenms-viz = self.packages.${system}.pyopenms-viz;
             };

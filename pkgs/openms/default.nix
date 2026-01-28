@@ -1,13 +1,16 @@
 {
+  # Package helpers:
   lib,
   stdenv,
   fetchFromGitHub,
-  cmake,
   wrapQtAppsHook,
   writableTmpDirAsHomeHook,
 
+  # Dependencies:
+  arrow-cpp,
   boost186,
   bzip2,
+  cmake,
   coinmp,
   darwin,
   dockerTools,
@@ -28,25 +31,25 @@
   zlib,
   zstd,
 
+  # Flags:
   enablePython ? true,
 }:
 
 let
-  version = "3.5.0"; # Must match version number in OpenMS source.
-  hash = "sha256-sLYT0cyqr7YhuA9LDIW8v4jdNCnSfLNLqZ6ANNwLERM=";
-
-  # NOTE: This is the actual release commit, but we have to use this
-  # instead of the tag because the wrong commit was tagged :(
-  preRelease = "c1370fb7f7c478574c9f48797e526ebca7736bee";
+  version = "3.6.0"; # Must match version number in OpenMS source.
+  preRelease = "1e8264793f2b86ab6697e85e951fdbf0e2224c99";
+  hash = "sha256-cT986PO2txPPm1SDEe3xBg/+fEZpJlOx9r6hYyVwx2A=";
 
   pythonAndPackages = python3.withPackages (
     py-pkgs: with py-pkgs; [
       autowrap
+      build
       cython
       numpy
       pandas
       pip
       pytest
+      py-build-cmake
       setuptools
       wheel
     ]
@@ -68,6 +71,7 @@ let
       os = if stdenv.hostPlatform.isDarwin then "macosx_0_0" else stdenv.hostPlatform.parsed.kernel.name;
       pyver = lib.concatStrings (lib.take 2 (lib.splitString "." python3.version));
     in
+    # Like: pyopenms-3.6.0-cp313-cp313-linux_x86_64.whl
     "pyopenms-${version}-cp${pyver}-cp${pyver}-${os}_${cpu}.whl";
 
   # The actual derivation:
@@ -82,7 +86,7 @@ let
       rev = if preRelease != null then preRelease else "refs/tags/release/${version}";
     };
 
-    doCheck = false;
+    doCheck = false; # :(
     checkTarget = "test";
     enableParallelBuilding = true;
 
@@ -103,21 +107,34 @@ let
 
     cmakeFlags = [
       # Builds don't have access to the network:
-      "-DENABLE_UPDATE_CHECK=OFF"
+      (lib.cmakeBool "ENABLE_UPDATE_CHECK" false)
 
       # Boost in nixpkgs doesn't have static libs:
-      "-DBOOST_USE_STATIC=OFF"
+      (lib.cmakeBool "BOOST_USE_STATIC" false)
 
       # Can't run GUI tools during the build:
-      "-DHAS_XSERVER=OFF"
+      (lib.cmakeBool "HAS_XSERVER" false)
 
       # Git objects not available at build time:
-      "-DGIT_TRACKING=OFF"
+      (lib.cmakeBool "GIT_TRACKING" false)
 
-    ]
-    ++ lib.optional enablePython "-DPYOPENMS=ON";
+      # Build with Parquet support:
+      (lib.cmakeBool "WITH_PARQUET" true)
+
+      # Do we want Python?
+      (lib.cmakeBool "PYOPENMS" enablePython)
+
+      # Python dependencies are already available in the build
+      # environment we don't need uv:
+      (lib.cmakeBool "WITH_UV" false)
+    ];
+
+    # Needed to export TOPP XML from the built executable files:
+    QT_PLUGIN_PATH = "${qtbase}/lib/qt-6/plugins";
+    QT_QPA_PLATFORM = "offscreen";
 
     buildInputs = [
+      arrow-cpp
       boost186
       bzip2
       coinmp
@@ -136,6 +153,35 @@ let
     ]
     ++ lib.optional enablePython pythonAndPackages;
 
+    patches = [
+      ./disable-download-test.patch
+      ../../patches/pyopenms-codesign-qt.patch
+    ];
+
+    postPatch = ''
+      # Get rid of unnecessary uses of `which`:
+      find . -type f -name '*.rb' -exec \
+        sed -i -E \
+          -e 's/`which codesign/`echo echo/g' \
+          -e 's/`which /`echo /g' '{}' ';'
+
+      # Let Nix fix the RPATHs:
+      (
+        echo '#!${ruby}/bin/ruby'
+        echo 'puts("Skip RPATH fixup")'
+      ) >cmake/MacOSX/fix_dependencies.rb
+    '';
+
+    postBuild = lib.optionalString enablePython ''
+      make pyopenms_wheel
+    '';
+
+    postInstall = lib.optionalString enablePython ''
+      mkdir -p "$out/share/whl"
+      find pyOpenMS/dist -type f -name '*.whl' \
+        -exec cp -a '{}' "$out/share/whl/${wheelName}" ';'
+    '';
+
     passthru = {
       # A docker container that only includes OpenMS:
       dockerimg = import ./dockerimg.nix {
@@ -153,38 +199,6 @@ let
         pythonImportsCheck = [ "pyopenms" ];
       };
     };
-
-    patches = [
-      ./disable-download-test.patch
-      ../../patches/pyopenms-codesign-qt.patch
-    ];
-
-    postPatch = ''
-      # Get rid of unnecessary uses of `which`:
-      find . -type f -name '*.rb' -exec \
-        sed -i -E 's/`which /`echo /g' '{}' ';'
-
-      # Let Nix fix the RPATHs:
-      (
-        echo '#!${ruby}/bin/ruby'
-        echo 'puts("Skip RPATH fixup")'
-      ) >cmake/MacOSX/fix_dependencies.rb
-    '';
-
-    postBuild = ''
-      ${lib.optionalString enablePython "make pyopenms"}
-
-      # Needed to export TOPP XML from the built executable files:
-      export QT_PLUGIN_PATH=${qtbase}/lib/qt-6/plugins
-      export QT_QPA_PLATFORM=offscreen
-      make doc
-    '';
-
-    postInstall = lib.optionalString enablePython ''
-      mkdir -p "$out/share/whl"
-      find pyOpenMS/dist -type f -name '*.whl' \
-        -exec cp -a '{}' "$out/share/whl/${wheelName}" ';'
-    '';
 
     meta = {
       description = "Open-source software for LC-MS data management and analyses";
