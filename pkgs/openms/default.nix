@@ -8,16 +8,19 @@
 
   # Dependencies:
   arrow-cpp,
-  boost186,
+  boost,
   bzip2,
   cmake,
   coinmp,
+  curl,
   dockerTools,
   doxygen,
   eigen,
   glpk,
+  graphviz,
   kissfft,
   libsvm,
+  libzip,
   openmp,
   python3,
   python3Packages,
@@ -35,19 +38,19 @@
 
 let
   version = "3.6.0"; # Must match version number in OpenMS source.
-  preRelease = "1e8264793f2b86ab6697e85e951fdbf0e2224c99";
-  hash = "sha256-cT986PO2txPPm1SDEe3xBg/+fEZpJlOx9r6hYyVwx2A=";
+  preRelease = "88f281943c9770903cc61b3126a25a912839cb77";
+  hash = "sha256-AoU3vpMdnjxpsocMjpSf5iESQ+slcgwJ8wdPF0WrnVU=";
 
   pythonAndPackages = python3.withPackages (
     py-pkgs: with py-pkgs; [
-      autowrap
       build
       cython
+      nanobind
       numpy
       pandas
       pip
-      pytest
       py-build-cmake
+      pytest
       setuptools
       wheel
     ]
@@ -77,13 +80,9 @@ let
       rev = if preRelease != null then preRelease else "refs/tags/release/${version}";
     };
 
-    doCheck = false; # :(
+    doCheck = true;
     checkTarget = "test";
     enableParallelBuilding = true;
-
-    patches = [
-      ./disable-download-test.patch
-    ];
 
     nativeBuildInputs = [
       cmake
@@ -102,9 +101,6 @@ let
 
       # Boost in nixpkgs doesn't have static libs:
       (lib.cmakeBool "BOOST_USE_STATIC" false)
-
-      # Can't run GUI tools during the build:
-      (lib.cmakeBool "HAS_XSERVER" false)
 
       # Git objects not available at build time:
       (lib.cmakeBool "GIT_TRACKING" false)
@@ -126,13 +122,16 @@ let
 
     buildInputs = [
       arrow-cpp
-      boost186
+      boost
       bzip2
       coinmp
+      curl
       eigen
       glpk
+      graphviz
       kissfft
       libsvm
+      libzip
       openmp
       qtbase
       qtsvg

@@ -50,6 +50,7 @@
 
           openms = pkgs.callPackage pkgs/openms {
             inherit (pkgs.kdePackages) wrapQtAppsHook qtbase qtsvg;
+            boost = pkgs.boost189;
             python3 = self.packages.${system}.python3;
             openmp = pkgs.llvmPackages.openmp;
           };
@@ -62,17 +63,12 @@
             python3Packages = self.packages.${system}.python3.pkgs;
           };
 
-          pyautowrap = pkgs.callPackage pkgs/pyautowrap.nix {
-            python3Packages = self.packages.${system}.python3.pkgs;
-          };
-
           pyopenms-viz = pkgs.callPackage pkgs/pyopenms-viz.nix {
             python3Packages = self.packages.${system}.python3.pkgs;
           };
 
           python3 = pkgs.python3.override {
             packageOverrides = final: prev: {
-              autowrap = self.packages.${system}.pyautowrap;
               py-build-cmake = self.packages.${system}.py-build-cmake;
               pyopenms = self.packages.${system}.openms.pyopenms;
               pyopenms-viz = self.packages.${system}.pyopenms-viz;
@@ -90,5 +86,46 @@
       ##########################################################################
       # Build and check everything:
       checks = each (pkgs: system: self.packages.${system});
+
+      ##########################################################################
+      # Shell environments for hacking on these projects:
+      devShells = each (
+        pkgs: system:
+        let
+          inherit (pkgs) lib;
+          gccVer = lib.concatStringsSep "." (lib.take 3 (lib.splitVersion pkgs.libgcc.version));
+        in
+        {
+          # A development environment for OpenMS:
+          openms = pkgs.mkShell {
+            name = "openms-dev";
+
+            dontFixCmake = true;
+            dontStrip = true;
+            hardeningDisable = [ "fortify" ];
+            cmakeBuildType = "RelWithDebInfo";
+
+            cmakeFlags = self.packages.${system}.openms.cmakeFlags ++ [
+              (lib.cmakeBool "CMAKE_EXPORT_COMPILE_COMMANDS" true)
+            ];
+
+            QT_PLUGIN_PATH = self.packages.${system}.openms.QT_PLUGIN_PATH;
+            PYTHON_LIBSTDCXX = "${pkgs.libgcc.lib}/share/gcc-${gccVer}/python";
+            inputsFrom = [ self.packages.${system}.openms ];
+            buildInputs = [ pkgs.clang-tools ];
+          };
+
+          # Similar to the above development environment for OpenMS,
+          # except debugging flags are set and optimizations are
+          # disabled.
+          openms-debug = self.devShells.${system}.openms.overrideAttrs (_: {
+            name = "openms-debug-dev";
+            cmakeBuildType = "Debug";
+          });
+
+          # The default development environment is for OpenMS:
+          default = self.devShells.${system}.openms;
+        }
+      );
     };
 }
