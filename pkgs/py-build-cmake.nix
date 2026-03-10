@@ -25,6 +25,13 @@ python3Packages.buildPythonPackage rec {
     pyproject-metadata
   ];
 
+  # They are always behind on dependencies:
+  postPatch = ''
+    sed -i -E \
+      -e 's/pyproject-metadata~=0.9.1/pyproject-metadata/' \
+      pyproject.toml
+  '';
+
   meta = {
     description = "Build backend for creating Python packages";
     longDescription = ''
