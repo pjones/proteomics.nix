@@ -43,6 +43,7 @@ let
   preRelease = "88f281943c9770903cc61b3126a25a912839cb77";
   hash = "sha256-AoU3vpMdnjxpsocMjpSf5iESQ+slcgwJ8wdPF0WrnVU=";
 
+  # Build-time Python dependencies:
   pythonAndPackages = python3.withPackages (
     py-pkgs: with py-pkgs; [
       build
