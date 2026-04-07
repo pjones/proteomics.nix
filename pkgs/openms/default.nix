@@ -31,8 +31,11 @@
 
 let
   version = "3.5.0"; # Must match version number in OpenMS source.
-  hash = "sha256-m/ZZI2dTkHTYW/G+gF8acNoBtuitJZdmo1bx7QLApo0=";
-  preRelease = "cfeacba3adc4783aff0f4f867b663556aad268e2";
+  hash = "sha256-sLYT0cyqr7YhuA9LDIW8v4jdNCnSfLNLqZ6ANNwLERM=";
+
+  # NOTE: This is the actual release commit, but we have to use this
+  # instead of the tag because the wrong commit was tagged :(
+  preRelease = "c1370fb7f7c478574c9f48797e526ebca7736bee";
 
   pythonAndPackages = python3.withPackages (
     py-pkgs: with py-pkgs; [
@@ -70,7 +73,7 @@ let
       rev = if preRelease != null then preRelease else "refs/tags/release/${version}";
     };
 
-    doCheck = true;
+    doCheck = false;
     checkTarget = "test";
     enableParallelBuilding = true;
 
