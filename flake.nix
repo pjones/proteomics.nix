@@ -112,7 +112,11 @@
             QT_PLUGIN_PATH = self.packages.${system}.openms.QT_PLUGIN_PATH;
             PYTHON_LIBSTDCXX = "${pkgs.libgcc.lib}/share/gcc-${gccVer}/python";
             inputsFrom = [ self.packages.${system}.openms ];
-            buildInputs = [ pkgs.clang-tools ];
+
+            buildInputs = [
+              pkgs.clang-tools
+              pkgs.ruff # For formatting and linting Python code.
+            ];
           };
 
           # Similar to the above development environment for OpenMS,
@@ -122,6 +126,19 @@
             name = "openms-debug-dev";
             cmakeBuildType = "Debug";
           });
+
+          # For testing pyOpenMS:
+          pyopenms = pkgs.mkShell {
+            name = "pyopenms";
+
+            buildInputs = [
+              (self.packages.${system}.python3.withPackages (
+                pypkgs: with pypkgs; [
+                  pyopenms
+                ]
+              ))
+            ];
+          };
 
           # The default development environment is for OpenMS:
           default = self.devShells.${system}.openms;
