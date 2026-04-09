@@ -1,0 +1,23 @@
+name: "Build and Test"
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: nixbuild/nix-quick-install-action@v34
+      - uses: cachix/cachix-action@v14
+        with:
+          name: proteomics
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+      - run: |
+            # Build and test everything:
+            nix flake check --print-build-logs
+
+            # We don't currently cache everything :(
+            nix build --no-link --print-out-paths \
+              .#openms .#openms.pyopenms |
+              cachix push proteomics
