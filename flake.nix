@@ -40,7 +40,13 @@
 
           metamorpheus = pkgs.callPackage pkgs/metamorpheus { };
 
-          msgfplus = pkgs.callPackage pkgs/msgfplus.nix { };
+          # Could not transfer artifact
+          # uk.ac.ebi.jmzidml:jmzidentml:pom:1.2.11 from/to
+          # nexus-ebi-release-repo
+          # (https://www.ebi.ac.uk/Tools/maven/repos/content/groups/ebi-repo/):
+          # status code: 401, reason phrase: Unauthorized (401)
+          #
+          # msgfplus = pkgs.callPackage pkgs/msgfplus.nix { };
 
           openms = pkgs.callPackage pkgs/openms {
             inherit (pkgs.kdePackages) wrapQtAppsHook qtbase qtsvg;
