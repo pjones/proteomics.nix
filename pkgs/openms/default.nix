@@ -26,6 +26,7 @@
   libsvm,
   libzip,
   openmp,
+  opentims,
   python3,
   python3Packages,
   qtbase,
@@ -121,7 +122,7 @@ let
       # environment we don't need uv:
       (lib.cmakeBool "WITH_UV" false)
 
-      # Until we get OpenTIMS building here.
+      # FIXME: https://github.com/OpenMS/OpenMS/issues/9147
       (lib.cmakeBool "WITH_OPENTIMS" false)
     ];
 
@@ -142,6 +143,7 @@ let
       libsvm
       libzip
       openmp
+      opentims
       qtbase
       qtsvg
       xercesc
