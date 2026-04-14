@@ -57,9 +57,11 @@
             inherit (pkgs.kdePackages) wrapQtAppsHook qtbase qtsvg;
             version = "3.6.0";
             src = self.inputs.openms;
+
             boost = pkgs.boost189;
-            python3 = self.packages.${system}.python3;
             openmp = pkgs.llvmPackages.openmp;
+            opentims = self.packages.${system}.opentims;
+            python3 = self.packages.${system}.python3;
           };
 
           opentims = pkgs.callPackage pkgs/opentims.nix { };
