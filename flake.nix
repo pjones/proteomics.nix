@@ -67,6 +67,8 @@
             openmp = pkgs.llvmPackages.openmp;
           };
 
+          opentims = pkgs.callPackage pkgs/opentims.nix { };
+
           percolator = pkgs.callPackage pkgs/percolator {
             boost = pkgs.boost186;
           };
