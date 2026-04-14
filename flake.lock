@@ -16,9 +16,26 @@
         "type": "github"
       }
     },
+    "openms": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1776157484,
+        "narHash": "sha256-weniZ0m4oHL5IXITHPx0NZbfTpbZ3Jk3IYuAiVOwgGk=",
+        "owner": "OpenMS",
+        "repo": "OpenMS",
+        "rev": "daa9562c09536411494d33ba5adbc6368f1beed5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "OpenMS",
+        "repo": "OpenMS",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "openms": "openms"
       }
     }
   },
