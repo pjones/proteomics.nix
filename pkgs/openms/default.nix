@@ -2,9 +2,12 @@
   # Package helpers:
   lib,
   stdenv,
-  fetchFromGitHub,
   wrapQtAppsHook,
   writableTmpDirAsHomeHook,
+
+  # Source and version from the flake:
+  src,
+  version,
 
   # Dependencies:
   arrow-cpp,
@@ -37,10 +40,6 @@
 }:
 
 let
-  version = "3.6.0"; # Must match version number in OpenMS source.
-  preRelease = "88f281943c9770903cc61b3126a25a912839cb77";
-  hash = "sha256-AoU3vpMdnjxpsocMjpSf5iESQ+slcgwJ8wdPF0WrnVU=";
-
   # Build-time Python dependencies:
   pythonAndPackages = python3.withPackages (
     py-pkgs: with py-pkgs; [
@@ -78,15 +77,8 @@ let
 
   # The actual derivation:
   package = stdenv.mkDerivation {
-    inherit version;
+    inherit src version;
     pname = "OpenMS";
-
-    src = fetchFromGitHub {
-      inherit hash;
-      owner = "OpenMS";
-      repo = "OpenMS";
-      rev = if preRelease != null then preRelease else "refs/tags/release/${version}";
-    };
 
     doCheck = true;
     checkTarget = "test";
@@ -122,6 +114,9 @@ let
       # Python dependencies are already available in the build
       # environment we don't need uv:
       (lib.cmakeBool "WITH_UV" false)
+
+      # Until we get OpenTIMS building here.
+      (lib.cmakeBool "WITH_OPENTIMS" false)
     ];
 
     # Needed to export TOPP XML from the built executable files:
