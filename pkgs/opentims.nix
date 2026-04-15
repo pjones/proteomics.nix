@@ -7,22 +7,22 @@
   cmake,
   python3,
   sqlite,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opentims";
-  version = "v1.2.0b2";
+  version = "v1.2.0b3";
 
   src = fetchFromGitHub {
     owner = "michalsta";
     repo = "opentims";
     rev = finalAttrs.version;
-    hash = "sha256-RfwV0FA/9f4jiq7CfWEbeS890dpxsvlhd0lHvQYFFAM=";
+    hash = "sha256-JmNIuQYa+Gd30HKy4QdKIPzb/t/PfLKl/1eDN2MKSpI=";
   };
 
-  cmakeBuildTargets = [
-    "opentims_cpp"
-    "opentims_py"
+  patches = [
+    ../patches/opentims.patch
   ];
 
   nativeBuildInputs = [
@@ -37,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     ))
 
     sqlite
+    zstd
   ];
 
   cmakeFlags = [
@@ -49,10 +50,4 @@ stdenv.mkDerivation (finalAttrs: {
     # Don't try to load libraries at runtime!
     (lib.cmakeBool "OPENTIMS_LINK_SQLITE_STATICALLY" true)
   ];
-
-  postInstall = ''
-    mkdir "$out/lib" "$out/include"
-    cp -a libopentims_cpp.a "$out/lib"
-    mv "$out/opentimspy/opentims++" "$out/include/opentims++"
-  '';
 })
