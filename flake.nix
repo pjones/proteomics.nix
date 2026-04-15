@@ -66,6 +66,8 @@
             python3Packages = self.packages.${system}.python3.pkgs;
           };
 
+          pyopenms = self.packages.${system}.openms.pyopenms;
+
           python3 = pkgs.python3.override {
             packageOverrides = final: prev: {
               autowrap = self.packages.${system}.pyautowrap;
