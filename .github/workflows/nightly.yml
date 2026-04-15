@@ -1,0 +1,21 @@
+name: "Nightly"
+
+on:
+  schedule:
+    - cron: "0 2 * * *"  # 02:00 UTC daily
+
+jobs:
+  openms-next-nightly:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: "openms-next"}
+      - uses: nixbuild/nix-quick-install-action@v34
+      - uses: cachix/cachix-action@v14
+        with: { name: proteomics, skipPush: true }
+      - run: |
+            nix flake update
+            nix build .#pyopenms --print-build-logs
