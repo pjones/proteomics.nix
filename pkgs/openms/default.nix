@@ -121,9 +121,6 @@ let
       # Python dependencies are already available in the build
       # environment we don't need uv:
       (lib.cmakeBool "WITH_UV" false)
-
-      # FIXME: https://github.com/OpenMS/OpenMS/issues/9147
-      (lib.cmakeBool "WITH_OPENTIMS" false)
     ];
 
     # Needed to export TOPP XML from the built executable files:

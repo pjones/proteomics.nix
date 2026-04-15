@@ -12,18 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opentims";
-  version = "v1.2.0b3";
+  version = "33b72834b7b8bee5e8a91b4dd669c94a8c14aa41";
 
   src = fetchFromGitHub {
     owner = "michalsta";
     repo = "opentims";
     rev = finalAttrs.version;
-    hash = "sha256-JmNIuQYa+Gd30HKy4QdKIPzb/t/PfLKl/1eDN2MKSpI=";
+    hash = "sha256-o5jLwFGdxu3brO3ez/g3ucWRRmAnDRikn52/aY88o2M=";
   };
-
-  patches = [
-    ../patches/opentims.patch
-  ];
 
   nativeBuildInputs = [
     cmake
