@@ -11,10 +11,10 @@ jobs:
         os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with: {ref: "openms-next"}
       - uses: nixbuild/nix-quick-install-action@v34
-      - uses: cachix/cachix-action@v14
+      - uses: cachix/cachix-action@v17
         with: { name: proteomics, skipPush: true }
       - run: |
             nix flake update
