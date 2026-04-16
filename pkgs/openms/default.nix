@@ -152,7 +152,7 @@ let
     ++ lib.optional enablePython pythonAndPackages;
 
     patches = [
-      ./disable-download-test.patch
+      ../../patches/openms-tims-zstd.patch
       ../../patches/pyopenms-codesign-qt.patch
     ];
 
