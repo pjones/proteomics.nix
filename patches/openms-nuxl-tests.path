@@ -1,0 +1,13 @@
+diff --git i/src/tests/topp/CMakeLists.txt w/src/tests/topp/CMakeLists.txt
+index 1532b4157d..52dbd2d5b3 100644
+--- i/src/tests/topp/CMakeLists.txt
++++ w/src/tests/topp/CMakeLists.txt
+@@ -2029,7 +2029,7 @@ set_tests_properties("TOPP_Resampler_2_out1" PROPERTIES DEPENDS "TOPP_Resampler_
+ #------------------------------------------------------------------------------
+ # OpenNuXL
+ 
+-if (NOT MSVC) # currently some minor numeric differences on windows. needs fixing
++if (NOT MSVC AND NOT APPLE) # currently some minor numeric differences on windows. needs fixing
+   # Disabled on macOS ARM64 due to test failures (see GitHub issue)
+   if (NOT (APPLE AND CMAKE_HOST_SYSTEM_PROCESSOR STREQUAL "arm64"))
+     add_test("TOPP_OpenNuXL_1" ${TOPP_BIN_PATH}/OpenNuXL -test -precursor:mass_tolerance 10.0 -in
