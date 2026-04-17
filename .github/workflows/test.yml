@@ -2,8 +2,6 @@ name: "Build and Test"
 
 on:
   pull_request:
-    branches: [ "trunk" ]
-
   push:
     branches: [ "openms-next" ]
 
