@@ -4,6 +4,7 @@
   stdenv,
   wrapQtAppsHook,
   writableTmpDirAsHomeHook,
+  fixDarwinDylibNames,
 
   # Source and version from the flake:
   src,
@@ -93,6 +94,7 @@ let
       wrapQtAppsHook
     ]
     ++ lib.optionals stdenv.isDarwin [
+      fixDarwinDylibNames
       darwin.sigtool
       ruby
     ];
