@@ -78,12 +78,15 @@
             python3Packages = self.packages.${system}.python3.pkgs;
           };
 
-          pyopenms = self.packages.${system}.openms.pyopenms;
+          pyopenms = pkgs.callPackage pkgs/pyopenms.nix {
+            pythonPackages = pkgs.python3Packages;
+            openms = self.packages.${system}.openms;
+          };
 
           python3 = pkgs.python3.override {
             packageOverrides = final: prev: {
               py-build-cmake = self.packages.${system}.py-build-cmake;
-              pyopenms = self.packages.${system}.openms.pyopenms;
+              pyopenms = self.packages.${system}.pyopenms;
               pyopenms-viz = self.packages.${system}.pyopenms-viz;
             };
           };
