@@ -24,7 +24,7 @@ jobs:
 
       - name: OpenMS on macOS
         if: runner.os == 'macOS'
-        run: nix build .#openms.pyopenms --print-build-logs
+        run: nix build .#pyopenms --print-build-logs
 
       - name: Build Everything on Linux
         if: runner.os == 'Linux'
