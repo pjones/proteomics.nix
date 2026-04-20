@@ -1,19 +1,21 @@
-{ lib
-, fetchFromGitHub
-, jre
-, maven
-, makeWrapper
+{
+  lib,
+  fetchFromGitHub,
+  jre,
+  maven,
+  makeWrapper,
 }:
 
+# https://nixos.org/manual/nixpkgs/stable/#maven
 maven.buildMavenPackage rec {
   pname = "msgfplus";
-  version = "2024.03.26";
+  version = "master";
 
   src = fetchFromGitHub {
-    owner = "MSGFPlus";
+    owner = "bigbio";
     repo = "msgfplus";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Gxr2RmLw91/GKXoY2rLimxHngCS2v590NErRIidwAP8=";
+    rev = version;
+    hash = "sha256-owMCZvi08XdZ8kcbYYqhwASKj9t8HIZAd3c+ZCRDgsU=";
   };
 
   mvnHash = "sha256-QG7sYtC+G4DrZ2KGfFC3iqMddJe6yoXkM3wwrSiqKXA=";
@@ -44,7 +46,7 @@ maven.buildMavenPackage rec {
       sequence database.
     '';
     mainProgram = "none";
-    homepage = "https://github.com/MSGFPlus/msgfplus";
+    homepage = "https://github.com/bigbio/msgfplus";
     license = "non-profit";
     maintainers = with lib.maintainers; [ pjones ];
     platforms = lib.platforms.all;
