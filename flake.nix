@@ -74,6 +74,10 @@
             python3Packages = self.packages.${system}.python3.pkgs;
           };
 
+          pylmcf = pkgs.callPackage pkgs/pylmcf.nix {
+            python = self.packages.${system}.python3;
+          };
+
           pyopenms-viz = pkgs.callPackage pkgs/pyopenms-viz.nix {
             python3Packages = self.packages.${system}.python3.pkgs;
           };
@@ -86,8 +90,11 @@
           python3 = pkgs.python3.override {
             packageOverrides = final: prev: {
               py-build-cmake = self.packages.${system}.py-build-cmake;
+              pylmcf = self.packages.${system}.pylmcf;
               pyopenms = self.packages.${system}.pyopenms;
               pyopenms-viz = self.packages.${system}.pyopenms-viz;
+              wnet = self.packages.${system}.wnet;
+              wnetalign = self.packages.${system}.wnetalign;
             };
           };
 
@@ -95,6 +102,14 @@
 
           thermorawfp = pkgs.callPackage pkgs/thermoraw/ThermoRawFileParser.nix {
             RawFileReader = self.packages.${system}.rawfilereader;
+          };
+
+          wnet = pkgs.callPackage pkgs/wnet.nix {
+            python = self.packages.${system}.python3;
+          };
+
+          wnetalign = pkgs.callPackage pkgs/wnetalign.nix {
+            python = self.packages.${system}.python3;
           };
         }
       );
