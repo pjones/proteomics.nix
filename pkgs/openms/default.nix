@@ -103,6 +103,11 @@ let
       # Python dependencies are already available in the build
       # environment we don't need uv:
       (lib.cmakeBool "WITH_UV" false)
+
+      # Header-only dependencies:
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_PYLMCF" "${python3.pkgs.pylmcf.src}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_WNET" "${python3.pkgs.wnet.src}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_WNETALIGN" "${python3.pkgs.wnetalign.src}")
     ];
 
     # Needed to export TOPP XML from the built executable files:
