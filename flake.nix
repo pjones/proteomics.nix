@@ -53,6 +53,10 @@
           #
           # msgfplus = pkgs.callPackage pkgs/msgfplus.nix { };
 
+          openms-thermo-bridge = pkgs.callPackage pkgs/openms-thermo-bridge.nix {
+            rawfilereader = self.packages.${system}.rawfilereader;
+          };
+
           openms = pkgs.callPackage pkgs/openms {
             inherit (pkgs.kdePackages) wrapQtAppsHook qtbase qtsvg;
             version = "3.6.0";
