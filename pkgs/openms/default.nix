@@ -104,6 +104,9 @@ let
       # environment we don't need uv:
       (lib.cmakeBool "WITH_UV" false)
 
+      # openms-thermo-bridge doesn't currently build in this repo
+      (lib.cmakeBool "WITH_THERMO_RAW" false)
+
       # Header-only dependencies:
       (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_PYLMCF" "${python3.pkgs.pylmcf.src}")
       (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_WNET" "${python3.pkgs.wnet.src}")
