@@ -19,11 +19,11 @@
     "openms": {
       "flake": false,
       "locked": {
-        "lastModified": 1782366371,
-        "narHash": "sha256-cSjkFXa/DCVIjYaZff/khi5yap7/gc+ajwSqt/e/ih4=",
+        "lastModified": 1787913131,
+        "narHash": "sha256-Q9XY3m1ttlbrDKnSV6FH9KnEA8uMsW0P0NvRat0T5HU=",
         "owner": "OpenMS",
         "repo": "OpenMS",
-        "rev": "93368e6d6d6bda77340651758aedf467089791fa",
+        "rev": "700d16bc9dd82a86a76e4116a4ae7e70d061b79e",
         "type": "github"
       },
       "original": {
