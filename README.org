@@ -77,11 +77,15 @@ analysis tools such as [[https://openms.de/][OpenMS]].
 
   - [[https://github.com/vdemichev/DiaNN][DIA-NN]] (=diann-academia=)
 
+  - [[https://diatracer.nesvilab.org/][diaTracer]] (=diatracer=)
+
   - [[https://github.com/smith-chem-wisc/FlashLFQ][FlashLFQ]] (=flashlfq=)
 
   - [[https://maxquant.org/][MaxQuant]] (=maxquant=) [fn:1] (installed as =MaxQuantCmd=)
 
   - [[https://github.com/smith-chem-wisc/MetaMorpheus][MetaMorpheus]] (=metamorpheus=)
+
+  - [[https://msfragger.nesvilab.org/][MSFragger]] (=msfragger=)
 
   - [[http://percolator.ms/][Percolator]] (=percolator=)
 

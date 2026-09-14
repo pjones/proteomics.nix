@@ -39,11 +39,17 @@
 
           diann-academia = pkgs.callPackage pkgs/diann-academia.nix { };
 
+          diatracer = pkgs.callPackage pkgs/diatracer.nix {
+            msfragger = self.packages.${system}.msfragger;
+          };
+
           flashlfq = pkgs.callPackage pkgs/flashlfq { };
 
           maxquant = pkgs.callPackage pkgs/maxquant.nix { };
 
           metamorpheus = pkgs.callPackage pkgs/metamorpheus { };
+
+          msfragger = pkgs.callPackage pkgs/msfragger.nix { };
 
           msgfplus = pkgs.callPackage pkgs/msgfplus.nix { };
 
