@@ -58,6 +58,12 @@
 
           msgfplus = pkgs.callPackage pkgs/msgfplus.nix { };
 
+          nanobind = pkgs.callPackage pkgs/nanobind.nix { };
+
+          nanobind-backend = pkgs.callPackage pkgs/nanobind-backend.nix {
+            python3Packages = self.packages.${system}.python3.pkgs;
+          };
+
           openms = pkgs.callPackage pkgs/openms {
             inherit (pkgs.kdePackages) wrapQtAppsHook qtbase qtsvg;
             version = "3.6.0";
@@ -94,6 +100,8 @@
 
           python3 = pkgs.python3.override {
             packageOverrides = final: prev: {
+              nanobind = self.packages.${system}.nanobind;
+              nanobind-backend = self.packages.${system}.nanobind-backend;
               py-build-cmake = self.packages.${system}.py-build-cmake;
               pylmcf = self.packages.${system}.pylmcf;
               pyopenms = self.packages.${system}.pyopenms;

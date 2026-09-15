@@ -49,6 +49,7 @@ let
       build
       cython
       nanobind
+      nanobind-backend
       numpy
       pandas
       pip
