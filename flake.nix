@@ -3,11 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-
-    openms = {
-      url = "github:OpenMS/OpenMS";
-      flake = false;
-    };
   };
 
   outputs =
@@ -66,9 +61,6 @@
 
           openms = pkgs.callPackage pkgs/openms {
             inherit (pkgs.kdePackages) wrapQtAppsHook qtbase qtsvg;
-            version = "3.6.0";
-            src = self.inputs.openms;
-
             boost = pkgs.boost189;
             openmp = pkgs.llvmPackages.openmp;
             opentims = self.packages.${system}.opentims;
