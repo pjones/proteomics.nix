@@ -2,11 +2,11 @@
   "nodes": {
     "nixpkgs": {
       "locked": {
-        "lastModified": 1789370336,
-        "narHash": "sha256-6RSEDHIWQtesQKWSu5qRai8L2h4KgCgMEfJHstW99G4=",
+        "lastModified": 1791161550,
+        "narHash": "sha256-hUcT0jKmSHN5XgRW3sSEIIlqsVClkVfToluYtOd56ok=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "c7def046b9a883d46974757852106483d741586f",
+        "rev": "8c6b39505383e6d5dcb431f00cb3597b71f8045c",
         "type": "github"
       },
       "original": {
@@ -16,26 +16,9 @@
         "type": "github"
       }
     },
-    "openms": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1789454235,
-        "narHash": "sha256-vjnJY4WQ9asGA1V71aOGrnHa3Pc1mXAMYUqFZsLX+aI=",
-        "owner": "OpenMS",
-        "repo": "OpenMS",
-        "rev": "b28308fe02b5b7fe4777065e5b3d958cac70c162",
-        "type": "github"
-      },
-      "original": {
-        "owner": "OpenMS",
-        "repo": "OpenMS",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs",
-        "openms": "openms"
+        "nixpkgs": "nixpkgs"
       }
     }
   },

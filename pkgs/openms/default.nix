@@ -1,14 +1,11 @@
 {
   # Package helpers:
+  fetchFromGitHub,
+  fixDarwinDylibNames,
   lib,
   stdenv,
   wrapQtAppsHook,
   writableTmpDirAsHomeHook,
-  fixDarwinDylibNames,
-
-  # Source and version from the flake:
-  src,
-  version,
 
   # Dependencies:
   arrow-cpp,
@@ -61,9 +58,16 @@ let
   );
 
   # The actual derivation:
-  package = stdenv.mkDerivation {
-    inherit src version;
+  package = stdenv.mkDerivation (finalAttrs: {
     pname = "OpenMS";
+    version = "3.6.0";
+
+    src = fetchFromGitHub {
+      owner = "OpenMS";
+      repo = "OpenMS";
+      rev = "v${finalAttrs.version}";
+      hash = "sha256-ipULQQ9MtqRCrcJecdpMWm2x3w7QvlMJ06SuZjYUvvk=";
+    };
 
     doCheck = true;
     checkTarget = "test";
@@ -74,7 +78,7 @@ let
       doxygen
       wrapQtAppsHook
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       fixDarwinDylibNames
       darwin.sigtool
       ruby
@@ -223,6 +227,6 @@ let
       maintainers = with lib.maintainers; [ pjones ];
       platforms = lib.platforms.all;
     };
-  };
+  });
 in
 package
