@@ -24,6 +24,7 @@ pythonPackages.buildPythonPackage {
 
   dependencies = with pythonPackages; [
     matplotlib
+    nanobind-backend
     numpy
     pandas
   ];

@@ -86,7 +86,7 @@
           };
 
           pyopenms = pkgs.callPackage pkgs/pyopenms.nix {
-            pythonPackages = pkgs.python3Packages;
+            pythonPackages = self.packages.${system}.python3.pkgs;
             openms = self.packages.${system}.openms;
           };
 
