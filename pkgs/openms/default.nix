@@ -205,14 +205,6 @@ let
       ''}
     '';
 
-    passthru = {
-      # A docker container that only includes OpenMS:
-      dockerimg = import ./dockerimg.nix {
-        inherit dockerTools;
-        openms = package;
-      };
-    };
-
     meta = {
       description = "Open-source software for LC-MS data management and analyses";
       longDescription = ''
