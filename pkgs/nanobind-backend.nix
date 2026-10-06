@@ -9,7 +9,7 @@
 
 let
   version = "1.0.0";
-  hash = "sha256-1Uym1aiQPKWl6kmZvVhKPNKTlpJ2lwDgwhy1idTzuc0=";
+  hash = "sha256-xiblGpT+1gkBT1gx+S5P9Id8gphKFWm+qOuFHFrX8jA=";
 in
 python3Packages.buildPythonPackage rec {
   inherit version;
