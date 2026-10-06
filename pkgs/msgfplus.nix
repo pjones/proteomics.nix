@@ -1,32 +1,36 @@
-{ lib
-, fetchFromGitHub
-, jre
-, maven
-, makeWrapper
+{
+  fetchurl,
+  jre,
+  lib,
+  makeWrapper,
+  stdenv,
+  unzip,
 }:
 
-maven.buildMavenPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "msgfplus";
   version = "2024.03.26";
 
-  src = fetchFromGitHub {
-    owner = "MSGFPlus";
-    repo = "msgfplus";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Gxr2RmLw91/GKXoY2rLimxHngCS2v590NErRIidwAP8=";
+  src = fetchurl {
+    url = "https://github.com/MSGFPlus/msgfplus/releases/download/v2024.03.26/MSGFPlus_v20240326.zip";
+    hash = "sha256-AbrLTnQHf4TCBvb5HrpnopQz0H1kn0OLATp3IXsL+qw=";
   };
 
-  mvnHash = "sha256-QG7sYtC+G4DrZ2KGfFC3iqMddJe6yoXkM3wwrSiqKXA=";
+  sourceRoot = ".";
+  dontBuild = true;
+  dontConfigure = true;
 
   nativeBuildInputs = [
     makeWrapper
+    unzip
   ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin $out/share/msgfplus
-    install -m 0644 target/MSGFPlus.jar $out/share/msgfplus
+    cp -ar Docs $out/share/docs
+    cp -a MSGFPlus* MzidToTsvConverter *.md *.txt $out/share/msgfplus
 
     makeWrapper \
       ${jre}/bin/java \
@@ -43,10 +47,11 @@ maven.buildMavenPackage rec {
       by scoring MS/MS spectra against peptides derived from a protein
       sequence database.
     '';
-    mainProgram = "none";
+    mainProgram = "msgfplus";
     homepage = "https://github.com/MSGFPlus/msgfplus";
     license = "non-profit";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ pjones ];
     platforms = lib.platforms.all;
   };
-}
+})
