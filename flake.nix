@@ -59,6 +59,10 @@
             python3Packages = self.packages.${system}.python3.pkgs;
           };
 
+          openms-thermo-bridge = pkgs.callPackage pkgs/openms-thermo-bridge {
+            rawfilereader = self.packages.${system}.rawfilereader;
+          };
+
           openms = pkgs.callPackage pkgs/openms.nix {
             inherit (pkgs.kdePackages) wrapQtAppsHook qtbase qtsvg;
             boost = pkgs.boost189;
