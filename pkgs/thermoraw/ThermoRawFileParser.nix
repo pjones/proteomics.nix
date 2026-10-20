@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, dotnetCorePackages
-, buildDotnetModule
-, zlib
-, RawFileReader
+{
+  lib,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  buildDotnetModule,
+  zlib,
+  RawFileReader,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule {
   pname = "ThermoRawFileParser";
   version = "1.4.5-dotnetcore";
 
@@ -17,7 +18,7 @@ buildDotnetModule rec {
     hash = "sha256-ACHdTL/9eNwzx/wpblxCjVRLv0esTEo7iXiVmVFPbN0=";
   };
 
-  nugetDeps = ./nuget-deps.nix;
+  nugetDeps = ./ThermoRawFileParser-deps.json;
   projectReferences = [ RawFileReader ];
 
   projectFile = "ThermoRawFileParser.csproj";
