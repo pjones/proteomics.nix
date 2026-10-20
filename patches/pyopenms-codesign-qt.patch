@@ -1,13 +1,13 @@
 diff --git i/src/pyOpenMS/CMakeLists.txt w/src/pyOpenMS/CMakeLists.txt
-index 3630bdb9aa..fdeba02fe0 100644
+index 550e1b8778..11a673f12f 100644
 --- i/src/pyOpenMS/CMakeLists.txt
 +++ w/src/pyOpenMS/CMakeLists.txt
-@@ -537,7 +537,7 @@ ELSE()
-             COMMAND ./mac_fix_dependencies.rb -l ${CMAKE_BINARY_DIR}/pyOpenMS/pyopenms -e "@rpath/" -f -v
-             # ad hoc signature is represented by a dash
-             # https://developer.apple.com/documentation/security/seccodesignatureflags/kseccodesignatureadhoc
--            COMMAND codesign --force --sign "-" ${CMAKE_BINARY_DIR}/pyOpenMS/pyopenms/Qt*
-+            # COMMAND codesign --force --sign "-" ${CMAKE_BINARY_DIR}/pyOpenMS/pyopenms/Qt*
-             COMMAND codesign --force --sign "-" ${CMAKE_BINARY_DIR}/pyOpenMS/pyopenms/*.dylib
-             #COMMAND ${Python_EXECUTABLE} setup.py bdist_egg
-             COMMAND ${Python_EXECUTABLE} -m pip wheel -w dist --no-deps --no-binary=pyopenms --no-build-isolation .
+@@ -405,7 +405,7 @@ else()
+     if(APPLE)
+       add_custom_target(pyopenms_fix_deps ALL
+         COMMAND ${PROJECT_SOURCE_DIR}/mac_fix_dependencies.rb -l "${PYOPENMS_BUILD_DIR}/pyopenms" -e "@rpath/" -r "@loader_path/" -f -v
+-        COMMAND codesign --force --sign - ${PYOPENMS_BUILD_DIR}/pyopenms/Qt* || true
++        # COMMAND codesign --force --sign - ${PYOPENMS_BUILD_DIR}/pyopenms/Qt* || true
+         COMMAND codesign --force --sign - ${PYOPENMS_BUILD_DIR}/pyopenms/*.dylib || true
+         COMMENT "Fixing deps and codesigning pyopenms binaries in build dir"
+       )

@@ -53,31 +53,53 @@
 
           msgfplus = pkgs.callPackage pkgs/msgfplus.nix { };
 
-          openms = pkgs.callPackage pkgs/openms {
-            inherit (pkgs.kdePackages) wrapQtAppsHook qtbase qtsvg;
-            python3 = self.packages.${system}.python3;
-            openmp = pkgs.llvmPackages.openmp;
+          nanobind = pkgs.callPackage pkgs/nanobind.nix { };
+
+          nanobind-backend = pkgs.callPackage pkgs/nanobind-backend.nix {
+            python3Packages = self.packages.${system}.python3.pkgs;
           };
+
+          openms = pkgs.callPackage pkgs/openms.nix {
+            inherit (pkgs.kdePackages) wrapQtAppsHook qtbase qtsvg;
+            boost = pkgs.boost189;
+            openmp = pkgs.llvmPackages.openmp;
+            opentims = self.packages.${system}.opentims;
+            python3 = self.packages.${system}.python3;
+          };
+
+          opentims = pkgs.callPackage pkgs/opentims.nix { };
 
           percolator = pkgs.callPackage pkgs/percolator {
             boost = pkgs.boost186;
           };
 
-          pyautowrap = pkgs.callPackage pkgs/pyautowrap.nix {
+          py-build-cmake = pkgs.callPackage pkgs/py-build-cmake.nix {
             python3Packages = self.packages.${system}.python3.pkgs;
+          };
+
+          pylmcf = pkgs.callPackage pkgs/pylmcf.nix {
+            python = self.packages.${system}.python3;
           };
 
           pyopenms-viz = pkgs.callPackage pkgs/pyopenms-viz.nix {
             python3Packages = self.packages.${system}.python3.pkgs;
           };
 
-          pyopenms = self.packages.${system}.openms.pyopenms;
+          pyopenms = pkgs.callPackage pkgs/pyopenms.nix {
+            pythonPackages = self.packages.${system}.python3.pkgs;
+            openms = self.packages.${system}.openms;
+          };
 
           python3 = pkgs.python3.override {
             packageOverrides = final: prev: {
-              autowrap = self.packages.${system}.pyautowrap;
-              pyopenms = self.packages.${system}.openms.pyopenms;
+              nanobind = self.packages.${system}.nanobind;
+              nanobind-backend = self.packages.${system}.nanobind-backend;
+              py-build-cmake = self.packages.${system}.py-build-cmake;
+              pylmcf = self.packages.${system}.pylmcf;
+              pyopenms = self.packages.${system}.pyopenms;
               pyopenms-viz = self.packages.${system}.pyopenms-viz;
+              wnet = self.packages.${system}.wnet;
+              wnetalign = self.packages.${system}.wnetalign;
             };
           };
 
@@ -85,6 +107,14 @@
 
           thermorawfp = pkgs.callPackage pkgs/thermoraw/ThermoRawFileParser.nix {
             RawFileReader = self.packages.${system}.rawfilereader;
+          };
+
+          wnet = pkgs.callPackage pkgs/wnet.nix {
+            python = self.packages.${system}.python3;
+          };
+
+          wnetalign = pkgs.callPackage pkgs/wnetalign.nix {
+            python = self.packages.${system}.python3;
           };
 
           # Docker container will all tools installed:
@@ -116,6 +146,64 @@
       # Build and check all packages that we have the source for:
       checks = each (
         pkgs: system: pkgs.lib.filterAttrs (_: pkg: !(pkg.passthru.manual or false)) self.packages.${system}
+      );
+
+      ##########################################################################
+      # Shell environments for hacking on these projects:
+      devShells = each (
+        pkgs: system:
+        let
+          inherit (pkgs) lib;
+          gccVer = lib.concatStringsSep "." (lib.take 3 (lib.splitVersion pkgs.libgcc.version));
+        in
+        {
+          # A development environment for OpenMS:
+          openms = pkgs.mkShell {
+            name = "openms-dev";
+
+            dontFixCmake = true;
+            dontStrip = true;
+            hardeningDisable = [ "fortify" ];
+            cmakeBuildType = "RelWithDebInfo";
+
+            cmakeFlags = self.packages.${system}.openms.cmakeFlags ++ [
+              (lib.cmakeBool "CMAKE_EXPORT_COMPILE_COMMANDS" true)
+            ];
+
+            QT_PLUGIN_PATH = self.packages.${system}.openms.QT_PLUGIN_PATH;
+            PYTHON_LIBSTDCXX = "${pkgs.libgcc.lib}/share/gcc-${gccVer}/python";
+            inputsFrom = [ self.packages.${system}.openms ];
+
+            buildInputs = [
+              pkgs.clang-tools
+              pkgs.ruff # For formatting and linting Python code.
+            ];
+          };
+
+          # Similar to the above development environment for OpenMS,
+          # except debugging flags are set and optimizations are
+          # disabled.
+          openms-debug = self.devShells.${system}.openms.overrideAttrs (_: {
+            name = "openms-debug-dev";
+            cmakeBuildType = "Debug";
+          });
+
+          # For testing pyOpenMS:
+          pyopenms = pkgs.mkShell {
+            name = "pyopenms";
+
+            buildInputs = [
+              (self.packages.${system}.python3.withPackages (
+                pypkgs: with pypkgs; [
+                  pyopenms
+                ]
+              ))
+            ];
+          };
+
+          # The default development environment is for OpenMS:
+          default = self.devShells.${system}.openms;
+        }
       );
     };
 }
