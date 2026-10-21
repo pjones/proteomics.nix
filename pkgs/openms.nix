@@ -20,6 +20,7 @@
   eigen,
   glpk,
   graphviz,
+  highs,
   kissfft,
   libsvm,
   libzip,
@@ -37,7 +38,9 @@
 
   # Flags:
   enablePython ? true,
-}:
+
+  ...
+}@args:
 
 let
   # Build-time Python dependencies:
@@ -60,14 +63,15 @@ let
   # The actual derivation:
   package = stdenv.mkDerivation (finalAttrs: {
     pname = "OpenMS";
-    version = "3.6.0";
+    version = args.version or "3.6.0";
 
-    src = fetchFromGitHub {
-      owner = "OpenMS";
-      repo = "OpenMS";
-      rev = "v${finalAttrs.version}";
-      hash = "sha256-ipULQQ9MtqRCrcJecdpMWm2x3w7QvlMJ06SuZjYUvvk=";
-    };
+    src =
+      args.src or (fetchFromGitHub {
+        owner = "OpenMS";
+        repo = "OpenMS";
+        rev = "v${finalAttrs.version}";
+        hash = "sha256-ipULQQ9MtqRCrcJecdpMWm2x3w7QvlMJ06SuZjYUvvk=";
+      });
 
     doCheck = true;
     checkTarget = "test";
@@ -131,6 +135,7 @@ let
       eigen
       glpk
       graphviz
+      highs
       kissfft
       libsvm
       libzip

@@ -3,6 +3,11 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+
+    openms-dev = {
+      url = "github:OpenMS/OpenMS";
+      flake = false;
+    };
   };
 
   outputs =
@@ -65,6 +70,9 @@
             openmp = pkgs.llvmPackages.openmp;
             opentims = self.packages.${system}.opentims;
             python3 = self.packages.${system}.python3;
+
+            version = "git-" + (builtins.substring 0 7 self.inputs.openms-dev.rev);
+            src = self.inputs.openms-dev;
           };
 
           opentims = pkgs.callPackage pkgs/opentims.nix { };
