@@ -3,14 +3,18 @@ name: "Build Container"
 on:
   pull_request:
     branches: [ "trunk" ]
-    types: [opened, synchronize, reopened, closed]
+    types: [ "opened", "synchronize", "reopened", "closed" ]
 
 jobs:
   build-push-container:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: nixbuild/nix-quick-install-action@v34
+
+      - uses: cachix/install-nix-action@v31
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+
       - uses: cachix/cachix-action@v17
         with: { name: proteomics, skipPush: true }
 
