@@ -1,0 +1,24 @@
+diff --git i/src/openms/thirdparty/mzpeak/include/mzpeak/metadata/scans.h w/src/openms/thirdparty/mzpeak/include/mzpeak/metadata/scans.h
+index 649c6a7fab..bc24ebb8cd 100644
+--- i/src/openms/thirdparty/mzpeak/include/mzpeak/metadata/scans.h
++++ w/src/openms/thirdparty/mzpeak/include/mzpeak/metadata/scans.h
+@@ -8,6 +8,7 @@ directory of this repository.
+ 
+ #pragma once
+ 
++#include <cstdint>
+ #include <memory>
+ #include <vector>
+ 
+diff --git i/src/openms/thirdparty/mzpeak/include/mzpeak/metadata/spectrum.h w/src/openms/thirdparty/mzpeak/include/mzpeak/metadata/spectrum.h
+index 60a08304ca..b651ad5f0d 100644
+--- i/src/openms/thirdparty/mzpeak/include/mzpeak/metadata/spectrum.h
++++ w/src/openms/thirdparty/mzpeak/include/mzpeak/metadata/spectrum.h
+@@ -8,6 +8,7 @@ top-level directory of this repository.
+ 
+ #pragma once
+ 
++#include <cstdint>
+ #include <memory>
+ #include <optional>
+ #include <vector>
