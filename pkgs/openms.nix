@@ -152,9 +152,9 @@ let
     ++ lib.optional enablePython pythonAndPackages;
 
     patches = [
+      ../patches/openms-mzpeak.patch
       ../patches/openms-nuxl-tests.path
       ../patches/openms-tims-zstd.patch
-      ../patches/pyopenms-codesign-qt.patch
     ];
 
     postPatch = ''
