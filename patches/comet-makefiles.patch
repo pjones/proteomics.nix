@@ -1,0 +1,38 @@
+diff --git i/MSToolkit/Makefile w/MSToolkit/Makefile
+index 119e6f03..7cd3f142 100755
+--- i/MSToolkit/Makefile
++++ w/MSToolkit/Makefile
+@@ -82,15 +82,15 @@ EXPAT_STAMP := $(BUILD_DIR)/.expat_installed
+ expat : $(EXPAT_STAMP)
+ 
+ $(EXPAT_SRC)/ :
+-	cd $(BUILD_EXT); unzip -o -qq $(EXPAT_ZIP)
++	echo cd $(BUILD_EXT); echo unzip -o -qq $(EXPAT_ZIP)
+ 
+ $(EXPAT_STAMP) : | $(BUILD_DIR)/ $(EXPAT_SRC)/
+-	cd $(EXPAT_SRC); ./configure --prefix=$(BUILD_DIR) \
++	echo cd $(EXPAT_SRC); echo ./configure --prefix=$(BUILD_DIR) \
+ 	   --enable-shared=yes --enable-static=yes \
+ 	   --without-xmlwf --without-examples --without-tests \
+ 	   --with-aix-soname=both \
+ 	   --includedir $(SRC_DIR)/include --libdir $(BUILD_DIR)
+-	make -C $(EXPAT_SRC) install
++	echo make -C $(EXPAT_SRC) install
+ 	touch $(EXPAT_STAMP)
+ 
+ expat-clean :
+@@ -120,11 +120,11 @@ ZLIB_DSO := $(patsubst ${ZLIB_SRC}/%.c, ${ZLIB_SRC}/%.lo, $(ZLIB_SRCB))
+ zlib : $(ZLIB_DST)
+ 
+ $(ZLIB_SRC)/ :
+-	cd $(BUILD_EXT); unzip -o -qq zlib1211.zip
++	echo cd $(BUILD_EXT); echo unzip -o -qq zlib1211.zip
+ 
+ $(ZLIB_DST) : | $(BUILD_DIR)/ $(ZLIB_SRC)/
+-	cd $(ZLIB_SRC); ./configure --prefix=$(BUILD_DIR) --includedir $(SRC_DIR)/include --libdir $(BUILD_DIR)
+-	make -C $(ZLIB_SRC) install
++	echo cd $(ZLIB_SRC); echo ./configure --prefix=$(BUILD_DIR) --includedir $(SRC_DIR)/include --libdir $(BUILD_DIR)
++	echo make -C $(ZLIB_SRC) install
+ 
+ zlib-clean :
+ 	rm -rf $(ZLIB_SRC)

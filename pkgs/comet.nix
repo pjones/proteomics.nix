@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, expat
-, zlib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  expat,
+  zlib,
 }:
 
 let
@@ -14,28 +15,28 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "comet";
-  version = "2025.02.0";
+  version = "2026.03.0";
 
   src = fetchFromGitHub {
     owner = "UWPR";
     repo = "Comet";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Opx+jHzciKUZsuApPsl67rieVjVGysjt0B+msZkZ+I8=";
+    hash = "sha256-OZMHTWPvOr/OH8wkjDGTW8m6pwG1oYGc7wk4FVIiVPk=";
   };
+
+  patches = [
+    # Don't build expat or zlib, use the ones in nixpkgs:
+    ../patches/comet-makefiles.patch
+  ];
 
   postPatch = ''
     # Don't force static pthreads and other libs:
     sed -i -e 's/ -static / /' Makefile
-
-    # Don't use the files in extern:
-    sed -i -E \
-      -e 's|EXPAT_DST\s+:=.*|EXPAT_DST = /dev/null|' \
-      -e 's|EXPAT_SRC\s+:=.*|EXPAT_SRC = ${expatStatic.dev}|' \
-      -e 's|ZLIB_DST\s+:=.*|ZLIB_DST = /dev/null|' \
-      MSToolkit/Makefile
   '';
 
   # Use existing versions of nixpkgs libraries:
+  #
+  # NOTE: See note above in in `patches`.
   preBuild = ''
     pushd MSToolkit
     mkdir -p obj
