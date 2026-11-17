@@ -77,13 +77,15 @@ analysis tools such as [[https://openms.de/][OpenMS]].
 
   - [[https://github.com/smith-chem-wisc/FlashLFQ][FlashLFQ]] (=flashlfq=)
 
-  - [[https://maxquant.org/][MaxQuant]] (=maxquant=) [fn:1] (installed as =MaxQuantCmd=)
+  - [[https://maxquant.org/][MaxQuant]][fn:1] (=maxquant=) (installed as =MaxQuantCmd=)
 
   - [[https://github.com/smith-chem-wisc/MetaMorpheus][MetaMorpheus]] (=metamorpheus=)
 
-  - [[https://msfragger.nesvilab.org/][MSFragger]] (=msfragger=)
+  - [[https://msfragger.nesvilab.org/][MSFragger]][fn:1] (=msfragger=)
 
   - [[http://percolator.ms/][Percolator]] (=percolator=)
+
+  - [[https://www.proteowizard.org/index.html][ProteoWizard]][fn:1] (proteowizard) (msconvert only)
 
   - [[https://uwpr.github.io/Comet/][Comet]] (=comet=)
 
