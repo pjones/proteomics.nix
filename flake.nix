@@ -80,6 +80,8 @@
             boost = pkgs.boost186;
           };
 
+          psims = pkgs.callPackage pkgs/psims.nix { };
+
           py-build-cmake = pkgs.callPackage pkgs/py-build-cmake.nix {
             python3Packages = self.packages.${system}.python3.pkgs;
           };
@@ -101,10 +103,14 @@
             packageOverrides = final: prev: {
               nanobind = self.packages.${system}.nanobind;
               nanobind-backend = self.packages.${system}.nanobind-backend;
+              psims = self.packages.${system}.psims;
               py-build-cmake = self.packages.${system}.py-build-cmake;
               pylmcf = self.packages.${system}.pylmcf;
               pyopenms = self.packages.${system}.pyopenms;
               pyopenms-viz = self.packages.${system}.pyopenms-viz;
+              serenipy = self.packages.${system}.serenipy;
+              tdfextractor = self.packages.tdfextractor;
+              tdfpy = self.packages.${system}.tdfpy;
               wnet = self.packages.${system}.wnet;
               wnetalign = self.packages.${system}.wnetalign;
             };
@@ -112,9 +118,17 @@
 
           rawfilereader = pkgs.callPackage pkgs/thermoraw/RawFileReader.nix { };
 
+          serenipy = pkgs.callPackage pkgs/serenipy.nix { };
+
+          tdfextractor = pkgs.callPackage pkgs/tdfextractor.nix {
+            python3Packages = self.packages.${system}.python3.pkgs;
+          };
+
           thermorawfp = pkgs.callPackage pkgs/thermoraw/ThermoRawFileParser.nix {
             RawFileReader = self.packages.${system}.rawfilereader;
           };
+
+          tdfpy = pkgs.callPackage pkgs/tdfpy.nix { };
 
           wnet = pkgs.callPackage pkgs/wnet.nix {
             python = self.packages.${system}.python3;
