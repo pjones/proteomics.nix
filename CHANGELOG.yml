@@ -1,6 +1,6 @@
 releases:
   - version: "26.11"
-    date: 2026-11-??
+    date: 2026-11-18
     markdown: |
       ### New Packages
 
@@ -23,3 +23,7 @@ releases:
       ### Updated Packages
 
       - OpenMS: 3.5.0 -> 3.6.0
+
+        Note: Although OpenMS 3.6.0 supports direct reading of Thermo
+        Raw files, this feature was disabled due to technical issues.
+        However, it should be available in the next release.
