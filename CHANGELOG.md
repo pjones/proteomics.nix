@@ -13,6 +13,13 @@
 - OpenTIMS
 - Percolator
 
+### New Python Packages
+
+- psims
+- serenipy
+- tdfextractor
+- tdfpy
+
 ### Updated Packages
 
 - OpenMS: 3.5.0 -> 3.6.0
