@@ -12,6 +12,7 @@
 - MSFragger
 - OpenTIMS
 - Percolator
+- ProteoWizard (msconvert only)
 
 ### New Python Packages
 

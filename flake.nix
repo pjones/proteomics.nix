@@ -80,6 +80,8 @@
             boost = pkgs.boost186;
           };
 
+          proteowizard = pkgs.callPackage pkgs/proteowizard.nix { };
+
           psims = pkgs.callPackage pkgs/psims.nix { };
 
           py-build-cmake = pkgs.callPackage pkgs/py-build-cmake.nix {
