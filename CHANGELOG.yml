@@ -1,0 +1,16 @@
+releases:
+  - version: "26.11"
+    date: 2026-11-??
+    markdown: |
+      ### New Packages
+
+      - Comet
+      - diaTracer
+      - MaxQuant
+      - MSFragger
+      - OpenTIMS
+      - Percolator
+
+      ### Updated Packages
+
+      - OpenMS: 3.5.0 -> 3.6.0

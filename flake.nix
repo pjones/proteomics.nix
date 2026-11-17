@@ -3,11 +3,14 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    releases.url = "github:pjones/releases";
   };
 
   outputs =
     { self, nixpkgs, ... }:
     let
+      version = "26.11";
+
       supportedSystems = [
         "x86_64-linux"
         "aarch64-linux"
@@ -142,6 +145,39 @@
               rawfilereader
               thermorawfp
             ]);
+          };
+
+          changes = pkgs.stdenvNoCC.mkDerivation (final: {
+            inherit version;
+            pname = "changelog";
+            src = ./CHANGELOG.yml;
+            dontUnpack = true;
+            dontBuild = true;
+
+            buildInputs = [
+              self.inputs.releases.packages.${system}.changelog
+            ];
+
+            installPhase = ''
+              mkdir -p "$out"
+              changelog -m "${final.version}" "$src" > "$out/changes.md"
+            '';
+          });
+        }
+      );
+
+      ##########################################################################
+      apps = each (
+        pkgs: system: {
+          changelog = {
+            type = "app";
+            meta.description = "Generate the CHANGELOG.md file";
+            program = toString (
+              pkgs.writeShellScript "gen-changelog" ''
+                ${self.inputs.releases.packages.${system}.changelog}/bin/changelog \
+                CHANGELOG.yml > CHANGELOG.md
+              ''
+            );
           };
         }
       );
