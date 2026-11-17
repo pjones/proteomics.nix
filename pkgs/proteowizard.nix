@@ -4,6 +4,7 @@
   requireFile,
   autoPatchelfHook,
   makeWrapper,
+  buildFHSEnv,
   libz,
 }:
 
@@ -31,6 +32,18 @@ stdenv.mkDerivation (finalAttrs: {
   dontBuild = true;
   dontConfigure = true;
 
+  fhsEnv = buildFHSEnv {
+    pname = "${finalAttrs.pname}-fhs-env";
+    version = finalAttrs.version;
+    runScript = "";
+
+    multiPkgs =
+      pkgs: with pkgs; [
+        icu
+        openssl
+      ];
+  };
+
   nativeBuildInputs = [
     autoPatchelfHook
     makeWrapper
@@ -57,9 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/bin"
 
     makeWrapper \
-      "$out/share/pwiz/msconvert" \
+      "${finalAttrs.fhsEnv}/bin/${finalAttrs.pname}-fhs-env" \
       "$out/bin/msconvert" \
-      --set DOTNET_SYSTEM_GLOBALIZATION_INVARIANT 1
+      --add-flags "$out/share/pwiz/msconvert"
 
     runHook postInstall
   '';
