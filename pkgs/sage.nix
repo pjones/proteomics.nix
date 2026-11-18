@@ -2,7 +2,9 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-
+  pkg-config,
+  sqlite,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -17,6 +19,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-RU5iPBUO/FszKI4TLvMJz4oeNPDubj2MHCjNtPK14ok=";
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    sqlite
+    zstd
+  ];
 
   meta = {
     description = "Proteomics search & quantification";
