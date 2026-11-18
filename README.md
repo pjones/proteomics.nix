@@ -96,6 +96,4 @@ A [Nix Flake](https://nixos.org/) (and Podman container) for easy access to prot
 
 - [ThermoRawFileParser](https://github.com/compomics/ThermoRawFileParser) (`thermorawfp`)
 
-## Footnotes
-
 [^1]: This is a non-free proprietary software package. To use it you must manually download the software from the vendor. Attempting to install the Nix package will provide the necessary instructions.
