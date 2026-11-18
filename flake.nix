@@ -9,7 +9,7 @@
   outputs =
     { self, nixpkgs, ... }:
     let
-      version = "26.11";
+      version = "26.11.0";
 
       supportedSystems = [
         "x86_64-linux"
