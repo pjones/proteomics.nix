@@ -120,6 +120,8 @@
 
           rawfilereader = pkgs.callPackage pkgs/thermoraw/RawFileReader.nix { };
 
+          sage = pkgs.callPackage pkgs/sage.nix { };
+
           serenipy = pkgs.callPackage pkgs/serenipy.nix { };
 
           tdfextractor = pkgs.callPackage pkgs/tdfextractor.nix {
@@ -159,6 +161,7 @@
               percolator
               python3
               rawfilereader
+              sage
               thermorawfp
             ]);
           };

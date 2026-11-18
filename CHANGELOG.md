@@ -13,6 +13,7 @@
 - OpenTIMS
 - Percolator
 - ProteoWizard (msconvert only)
+- Sage (0.15 beta)
 
 ### New Python Packages
 
