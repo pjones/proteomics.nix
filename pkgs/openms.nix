@@ -15,7 +15,6 @@
   coinmp,
   curl,
   darwin,
-  dockerTools,
   doxygen,
   eigen,
   glpk,
