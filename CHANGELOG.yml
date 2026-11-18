@@ -1,5 +1,5 @@
 releases:
-  - version: "26.11"
+  - version: "26.11.0"
     date: 2026-11-18
     markdown: |
       ### New Packages
